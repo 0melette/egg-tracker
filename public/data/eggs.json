@@ -1,0 +1,19 @@
+{
+  "eggs": [
+    {
+      "date": "2025-04-18",
+      "eggs": [
+        {
+          "weight": 60,
+            "color": "#800080",
+          "speckled": false
+        },
+        {
+          "weight": 60,
+          "color": "#f0e0c9",
+          "speckled": true
+        }
+      ]
+    }
+  ]
+}
