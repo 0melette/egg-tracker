@@ -19,6 +19,16 @@ const config: Config = {
     },
     extend: {
       colors: {
+        egg: {
+          blue: "#005B99",
+          beige: "FFDFD9",
+          sky: "#4FAADC",
+          gold: "#F9C75E",
+          cream: "#FFF3DC",
+          orange: "#FFA339",
+          brown: "#9C4B1B",
+          mutedBlue: "#2A72B5",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

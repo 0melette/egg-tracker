@@ -93,7 +93,7 @@ export default function AddEgg() {
         <p className="text-gray-500 mb-6">Adding eggs for {formattedDate}</p>
 
         <form onSubmit={handleSubmit}>
-          <div className="bg-[#e8d5b5] p-6 rounded-lg mb-6">
+          <div className="bg-egg-cream p-6 rounded-lg mb-6">
             <div className="text-center mb-6">
               <h2 className="text-2xl mb-4">how many eggs today?</h2>
               {eggCount > 1 && (
