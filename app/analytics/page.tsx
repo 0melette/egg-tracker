@@ -140,7 +140,7 @@ export default function Analytics() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={weightDistributionData}
+                    data={weightDistributionData.filter((entry) => entry.value > 0)}
                     cx="50%"
                     cy="50%"
                     labelLine={true}
@@ -171,7 +171,7 @@ export default function Analytics() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={eggTypeData}
+                  data={eggTypeData.filter((entry) => entry.value > 0)}
                   cx="50%"
                   cy="50%"
                   labelLine={true}

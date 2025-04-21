@@ -92,7 +92,7 @@ export function EggTimeline() {
         {lastSevenDays.map((day) => (
           <div key={day.date} className="rounded-lg overflow-hidden">
             <div className="bg-egg-blue py-2 px-4">
-              <span className="font-medium">{format(new Date(day.date), "EEEE do MMMM")}</span>
+              <span className="font-medium text-egg-cream ">{format(new Date(day.date), "EEEE do MMMM")}</span>
             </div>
             <div
               className="bg-egg-cream p-4 relative min-h-[120px] cursor-pointer"
