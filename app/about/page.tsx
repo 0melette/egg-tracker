@@ -1,70 +1,46 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 interface ChickenProfile {
-  id: number
-  name: string
-  breed: string
-  age: string
-  favoriteFood: string
-  personality: string
-  funFact: string
-  eggColor: string
-  avgEggWeight: number
-  eggsPerWeek: number
-  image: string
+  id: number;
+  name: string;
+  breed: string;
+  funFact: string;
+  image: string;
 }
 
 const chickens: ChickenProfile[] = [
   {
     id: 1,
-    name: "Henrietta",
-    breed: "Rhode Island Red",
-    age: "2 years",
-    favoriteFood: "Mealworms",
-    personality: "Bossy but lovable",
-    funFact: "Can recognize her own name",
-    eggColor: "Brown",
-    avgEggWeight: 65,
-    eggsPerWeek: 5,
-    image: "/images/chicken1.png",
+    name: "Two Peck 1",
+    breed: "ISA Brown",
+    funFact: "Chilling",
+    image: "/images/two-peck-chilling.png",
   },
   {
     id: 2,
-    name: "Gertrude",
-    breed: "Plymouth Rock",
-    age: "3 years",
-    favoriteFood: "Sunflower seeds",
-    personality: "Curious and friendly",
-    funFact: "Loves to be held and petted",
-    eggColor: "Light brown",
-    avgEggWeight: 58,
-    eggsPerWeek: 4,
-    image: "/images/chicken2.png",
+    name: "Two Peck 2",
+    breed: "ISA Brown",
+    funFact: "Catches bugs like a pro",
+    image: "/images/two-peck-coding.png",
   },
   {
     id: 3,
-    name: "Mabel",
-    breed: "Leghorn",
-    age: "1.5 years",
-    favoriteFood: "Corn",
-    personality: "Energetic and vocal",
-    funFact: "First to greet visitors at the coop",
-    eggColor: "White",
-    avgEggWeight: 62,
-    eggsPerWeek: 6,
-    image: "/images/chicken3.png",
+    name: "Two Peck 3",
+    breed: "ISA Brown",
+    funFact: "Two Peck Bath Water",
+    image: "/images/two-peck-bath.png",
   },
-]
+];
 
 function ChickenCard({ chicken }: { chicken: ChickenProfile }) {
-  const [isFlipped, setIsFlipped] = useState(false)
+  const [isFlipped, setIsFlipped] = useState(false);
 
   return (
     <div className="w-full max-w-xs mx-auto perspective">
@@ -80,17 +56,9 @@ function ChickenCard({ chicken }: { chicken: ChickenProfile }) {
           className="absolute w-full h-full backface-hidden rounded-xl overflow-hidden border-4 border-yellow-200 bg-gradient-to-b from-sky-100 to-green-100"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="h-1/2 bg-sky-200 flex items-center justify-center p-4">
-            <div className="relative w-32 h-32">
-              <Image src={chicken.image || "/placeholder.svg"} alt={chicken.name} fill className="object-contain" />
-            </div>
-          </div>
-          <div className="h-1/2 bg-gradient-to-b from-green-100 to-green-200 p-4 flex flex-col items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-b from-green-100 to-green-200 p-4 flex flex-col items-center justify-center">
             <h3 className="text-xl font-bold mb-1">{chicken.name}</h3>
             <p className="text-sm text-gray-600 mb-3">{chicken.breed}</p>
-            <div className="w-full bg-yellow-100 rounded-lg p-3 text-center">
-              <p className="text-sm font-medium">Click to meet {chicken.name}!</p>
-            </div>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-8 bg-green-300 z-10"></div>
           <div className="absolute bottom-0 left-0 right-0 h-6 bg-green-400 z-20"></div>
@@ -103,43 +71,25 @@ function ChickenCard({ chicken }: { chicken: ChickenProfile }) {
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           <h3 className="text-xl font-bold text-center mb-3">{chicken.name}</h3>
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="font-medium">Age:</span>
-              <span>{chicken.age}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">Favorite Food:</span>
-              <span>{chicken.favoriteFood}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">Personality:</span>
-              <span>{chicken.personality}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">Egg Color:</span>
-              <span>{chicken.eggColor}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">Avg Egg Weight:</span>
-              <span>{chicken.avgEggWeight}g</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">Eggs Per Week:</span>
-              <span>{chicken.eggsPerWeek}</span>
-            </div>
+          <div className="space-y-2 text-sm"></div>
+          <div className="relative w-48 h-60 flex items-center justify-center mx-auto">
+            <Image
+              src={chicken.image || "/placeholder.svg"}
+              alt={chicken.name}
+              fill
+              className="object-contain"
+            />
           </div>
-          <div className="mt-4 p-3 bg-yellow-100 rounded-lg">
-            <p className="text-sm italic">"{chicken.funFact}"</p>
+          <div className="mt-4 mx-auto w-[220px] p-3 bg-egg-gold rounded-lg text-center">
+            <p className="text-sm italic text-egg-brown">"{chicken.funFact}"</p>
           </div>
-          <div className="mt-4 text-center text-xs text-gray-500">Click to flip back</div>
           <div className="absolute bottom-0 left-0 right-0 h-8 bg-green-300 z-10"></div>
           <div className="absolute bottom-0 left-0 right-0 h-6 bg-green-400 z-20"></div>
           <div className="absolute bottom-0 left-0 right-0 h-4 bg-green-500 z-30"></div>
         </div>
       </motion.div>
     </div>
-  )
+  );
 }
 
 export default function About() {
@@ -155,7 +105,6 @@ export default function About() {
 
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Meet the Makers</h1>
-          <p className="text-gray-600">The feathered friends behind our eggs</p>
         </div>
 
         <div className="relative">
@@ -174,16 +123,10 @@ export default function About() {
         </div>
 
         <div className="mt-12 text-center">
-          <h2 className="text-2xl font-bold mb-4">Our Coop</h2>
+          <h2 className="text-2xl font-bold mb-4">the gang</h2>
           <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md">
-            <p className="mb-4">
-              Our chickens live in a spacious, custom-built coop with plenty of room to roam and explore. They enjoy
-              organic feed, fresh vegetables, and lots of sunshine.
-            </p>
-            <p>
-              Each of our feathered friends has their own personality and egg-laying style, contributing to the variety
-              of eggs you see in our collection.
-            </p>
+            <p className="mb-4">I have 3 chickens!!</p>
+            <p>more to come 🫣?!</p>
           </div>
         </div>
       </div>
@@ -196,5 +139,5 @@ export default function About() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -73,7 +73,7 @@ export function EditEggModal({
     try {
       const egg = {
         weight,
-        color: eggColor, // Darker egg color
+        color: eggColor,
         speckled: isSpeckled,
       }
 
@@ -139,7 +139,7 @@ export function EditEggModal({
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
-          <div className="bg-[#e8d5b5] p-6 rounded-lg mb-4">
+          <div className="bg-egg-cream p-6 rounded-lg mb-4">
             <div className="flex flex-col items-center justify-center">
               <div className="flex items-center justify-center w-full mb-4">
                 <Button
@@ -172,7 +172,6 @@ export function EditEggModal({
               </div>
 
               <div className="text-center mb-2">
-                <p className="text-sm text-gray-700 mb-1">Use arrows to toggle speckles</p>
                 <div className="font-bold flex items-center justify-center gap-1 mb-3">
                   <Input
                     type="text"
