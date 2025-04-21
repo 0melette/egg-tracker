@@ -21,7 +21,7 @@ const config: Config = {
       colors: {
         egg: {
           blue: "#005B99",
-          beige: "FFDFD9",
+          beige: "#FFDFD9",
           sky: "#4FAADC",
           gold: "#F9C75E",
           cream: "#FFF3DC",
