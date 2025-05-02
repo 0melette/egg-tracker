@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { EggOval } from "@/components/egg-oval"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { useRouter } from "next/navigation"
+import { getSecretKey } from "@/lib/utils"
 
 interface EditEggModalProps {
   isOpen: boolean
@@ -101,7 +102,7 @@ export function EditEggModal({
         ? { date, eggs: [egg] } 
         : { date, eggIndex, egg, rowIndex: initialRowIndex }
 
-      const secretKey = prompt("what's the secret password 🤭?") || '';
+      const secretKey = getSecretKey();
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -137,7 +138,7 @@ export function EditEggModal({
 
     setSubmitting(true)
     try {
-      const secretKey = prompt("what's the secret password 🤭?") || '';
+      const secretKey = getSecretKey();
 
       const response = await fetch("/api/delete-egg", {
         method: "POST",

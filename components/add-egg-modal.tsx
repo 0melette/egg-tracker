@@ -11,6 +11,7 @@ import { Slider } from "@/components/ui/slider"
 import { EggOval } from "@/components/egg-oval"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useRouter } from "next/navigation"
+import { getSecretKey } from "@/lib/utils"
 
 interface AddEggModalProps {
   isOpen: boolean
@@ -126,7 +127,7 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
     setSubmitting(true)
 
     try {
-      const secretKey = prompt("what's the secret password 🤭?") || '';
+      const secretKey = getSecretKey();
       
       // Prepare the egg data
       const eggs = eggWeights.map((weight, index) => {

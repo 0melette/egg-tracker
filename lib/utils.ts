@@ -6,6 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function getSecretKey(): string {
+  return prompt("what's the secret password 🤭?") || '';
+}
+
 export function validateApiKey(request: NextRequest) {
   const secretKey = request.headers.get("X-Secret-Key") || 
                    new URLSearchParams(request.url.split('?')[1] || '').get("secretKey") ||
