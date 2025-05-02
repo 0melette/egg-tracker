@@ -126,14 +126,7 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
     setSubmitting(true)
 
     try {
-      let secretKey = localStorage.getItem('eggTrackerSecretKey') || '';
-      
-      if (!secretKey) {
-        secretKey = prompt("Please enter the secret key to modify eggs:") || '';
-        if (secretKey) {
-          localStorage.setItem('eggTrackerSecretKey', secretKey);
-        }
-      }
+      const secretKey = prompt("what's the secret password 🤭?") || '';
       
       // Prepare the egg data
       const eggs = eggWeights.map((weight, index) => {
@@ -179,8 +172,6 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
         const errorData = await response.json();
         
         if (response.status === 403) {
-          // Clear the stored secret key if it's invalid
-          localStorage.removeItem('eggTrackerSecretKey');
           throw new Error(errorData.error || "Invalid secret key")
         } else {
           throw new Error("Failed to save eggs")
