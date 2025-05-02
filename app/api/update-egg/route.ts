@@ -21,6 +21,9 @@ export async function POST(request: Request) {
     if (rowIndex === undefined) {
       return NextResponse.json({ error: "Missing rowIndex for Sheets update" }, { status: 400 })
     }
+    if (typeof rowIndex !== "number" || !Number.isInteger(rowIndex) || rowIndex <= 0) {
+      return NextResponse.json({ error: "Invalid rowIndex. It must be a positive integer." }, { status: 400 })
+    }
     
     // Update the egg in Google Sheets
     await updateEggInSheets(rowIndex, egg)
