@@ -22,10 +22,14 @@ export function EggTimeline() {
     async function fetchData() {
       try {
         const response = await fetch(`/api/eggs?days=7&refresh=${refreshKey}`)
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`)
+        }
         const data = await response.json()
-        setRecentDays(data)
+        setRecentDays(Array.isArray(data) ? data : [])
       } catch (error) {
         console.error("Error fetching egg data:", error)
+        setRecentDays([]) // Ensure we always have an array
       } finally {
         setLoading(false)
       }
@@ -40,7 +44,10 @@ export function EggTimeline() {
 
   // Generate the last 7 days if we don't have enough data
   const ensureLastSevenDays = () => {
-    const days: DayData[] = [...recentDays]
+    // Create a safe copy of recentDays, ensuring it's an array
+    const days: DayData[] = Array.isArray(recentDays) ? [...recentDays] : []
+    
+    // Create a map for quick date lookup
     const dateMap = new Map(days.map((day) => [day.date, day]))
 
     // Get today's date

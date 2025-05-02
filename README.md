@@ -18,6 +18,7 @@ A web application for tracking the daily collection of chicken eggs, including f
 - **Responsive Design**: Works on both desktop and mobile devices
 - **Data Visualization**: Charts and graphs to show egg production patterns and weight distribution
 - **Edit Functionality**: Modify or delete previously recorded eggs
+- **Google Sheets Integration**: Option to store data in Google Sheets instead of local JSON files
 
 ## Project Structure
 
@@ -38,7 +39,8 @@ egg-tracker/
 │   └── ui/               # UI component library
 ├── hooks/                # Custom React hooks
 ├── lib/                  # Utility functions and data services
-│   ├── data-service.ts   # Functions for data handling
+│   ├── data-service.ts   # Functions for local data handling
+│   ├── sheets-service.ts # Functions for Google Sheets integration
 │   └── utils.ts          # Helper utilities
 ├── public/               # Static assets
 │   ├── data/             # JSON data storage
@@ -58,6 +60,7 @@ egg-tracker/
 - **Radix UI**: Headless UI components
 - **React Hook Form**: Form handling library
 - **Lucide React**: Icon library
+- **Google Sheets API**: Optional integration for storing egg data in Google Sheets
 
 ## Installation
 
@@ -88,6 +91,9 @@ egg-tracker/
    ```bash
    echo '{"eggs":[]}' > public/data/eggs.json
    ```
+
+5. (Optional) Set up Google Sheets integration:
+   - Follow the detailed instructions in [GOOGLE_SHEETS_SETUP.md](GOOGLE_SHEETS_SETUP.md)
 
 ## Usage
 
