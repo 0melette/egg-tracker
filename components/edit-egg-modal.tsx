@@ -17,6 +17,7 @@ interface EditEggModalProps {
   eggIndex?: number
   initialWeight?: number
   initialSpeckled?: boolean
+  initialSeed?: number
   onDelete?: () => void
   initialRowIndex?: number  // Added for Google Sheets
 }
@@ -28,6 +29,7 @@ export function EditEggModal({
   eggIndex,
   initialWeight = 60,
   initialSpeckled = false,
+  initialSeed = 0,
   onDelete,
   initialRowIndex,
 }: EditEggModalProps) {
@@ -35,6 +37,7 @@ export function EditEggModal({
   const [weight, setWeight] = useState(initialWeight)
   const [weightInput, setWeightInput] = useState(initialWeight.toString())
   const [isSpeckled, setIsSpeckled] = useState(initialSpeckled)
+  const [seed, setSeed] = useState(initialSeed)
   const [submitting, setSubmitting] = useState(false)
   const isNewEgg = eggIndex === undefined
 
@@ -45,8 +48,9 @@ export function EditEggModal({
       setWeight(initialWeight)
       setWeightInput(initialWeight.toString())
       setIsSpeckled(initialSpeckled)
+      setSeed(initialSeed)
     }
-  }, [isOpen, initialWeight, initialSpeckled])
+  }, [isOpen, initialWeight, initialSpeckled, initialSeed])
 
   const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWeightInput(e.target.value)
@@ -64,7 +68,16 @@ export function EditEggModal({
   }
 
   const toggleSpeckled = () => {
-    setIsSpeckled(!isSpeckled)
+    const newSpeckledValue = !isSpeckled
+    setIsSpeckled(newSpeckledValue)
+    
+    // Generate a new random seed if toggling to speckled and current seed is 0
+    if (newSpeckledValue && (!seed || seed === 0)) {
+      setSeed(Math.floor(Math.random() * 1000000) + 1)
+    } else if (!newSpeckledValue) {
+      // Reset seed to 0 when not speckled
+      setSeed(0)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,6 +90,7 @@ export function EditEggModal({
         weight,
         color: eggColor,
         speckled: isSpeckled === true,
+        seed: isSpeckled ? seed : 0,
       }
       
       console.log('Created egg object:', egg);
@@ -164,7 +178,8 @@ export function EditEggModal({
                     <EggOval 
                       weight={weight} 
                       color={eggColor} 
-                      speckled={isSpeckled === true} 
+                      speckled={isSpeckled === true}
+                      seed={isSpeckled ? seed : 0}
                       className="scale-150"
                       key={`edit-egg-${date}-${eggIndex || 'new'}`}
                     />

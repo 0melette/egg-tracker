@@ -118,7 +118,7 @@ export function EggTimeline() {
                     >
                       <div className="bg-white p-3 rounded-md inline-block">
                         <div className="w-[100px] h-[130px] relative flex items-center justify-center">
-                          <EggOval weight={egg.weight} color={egg.color} speckled={egg.speckled} />
+                          <EggOval weight={egg.weight} color={egg.color} speckled={egg.speckled} seed={egg.seed} />
                         </div>
                       </div>
                       <div className="mt-1 font-bold">{egg.weight}g</div>
@@ -149,6 +149,7 @@ export function EggTimeline() {
         eggIndex={selectedEggIndex}
         initialWeight={selectedEgg?.weight}
         initialSpeckled={selectedEgg?.speckled}
+        initialSeed={selectedEgg?.seed}
         initialRowIndex={selectedEgg?.rowIndex}
         onDelete={handleEggDeleted}
       />

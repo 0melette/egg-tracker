@@ -20,7 +20,7 @@ export async function readEggDataFromSheets(): Promise<EggData> {
     // Get data from 'Eggs' sheet
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Eggs!A2:D', // Assuming headers are in row 1
+      range: 'Eggs!A2:E', // Assuming headers are in row 1
     });
 
     const rows = response.data.values || [];
@@ -39,7 +39,20 @@ export async function readEggDataFromSheets(): Promise<EggData> {
         const date = row[0];
         const weight = Number(row[1]);
         const color = row[2];
-        const speckledValue = row[3] === 'true';
+        
+        // More robust handling of the speckled flag
+        // Check for any variation of 'true', 'yes', '1', or a non-zero seed value
+        const speckledRaw = row[3]?.toString().toLowerCase() || '';
+        const seedValue = row.length >= 5 ? Number(row[4] || 0) : 0;
+        
+        // Consider an egg speckled if: 
+        // 1. It explicitly has speckled='true', OR
+        // 2. It has a non-zero seed value
+        const speckledValue = 
+          speckledRaw === 'true' || 
+          speckledRaw === 'yes' || 
+          speckledRaw === '1' || 
+          (seedValue > 0);
         
         console.log(
           `%c Row #${index}:`,
@@ -48,6 +61,7 @@ export async function readEggDataFromSheets(): Promise<EggData> {
           `Weight: ${weight}g`,
           `Color: ${color}`,
           `Speckled raw: "${row[3]}"`,
+          `Seed value: ${seedValue}`,
           `→ Parsed as: ${speckledValue ? '✓' : '✗'}`
         );
         
@@ -55,6 +69,7 @@ export async function readEggDataFromSheets(): Promise<EggData> {
           weight, 
           color, 
           speckled: speckledValue, // Store as boolean
+          seed: seedValue,
           rowIndex: index // Store the row index for later updates
         };
         
@@ -119,7 +134,8 @@ export async function addEggsToSheets(date: string, eggs: Egg[]): Promise<void> 
       date,
       egg.weight.toString(),
       egg.color,
-      egg.speckled === true ? 'true' : 'false'
+      egg.speckled === true ? 'true' : 'false',
+      (egg.seed?.toString() ?? '0')
     ]);
     
     console.log('%c Data being saved to sheets:', 'color: #F4B400; font-weight: bold;');
@@ -128,7 +144,7 @@ export async function addEggsToSheets(date: string, eggs: Egg[]): Promise<void> 
     // Append rows to the spreadsheet
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Eggs!A:D',
+      range: 'Eggs!A:E',
       valueInputOption: 'USER_ENTERED',
       requestBody: {
         values: rows
@@ -169,13 +185,14 @@ export async function updateEggInSheets(
     // Update the row
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `Eggs!B${rowIndex + 2}:D${rowIndex + 2}`, // +2 because row 1 is headers
+      range: `Eggs!B${rowIndex + 2}:E${rowIndex + 2}`, // +2 because row 1 is headers
       valueInputOption: 'USER_ENTERED',
       requestBody: {
         values: [[
           egg.weight.toString(),
           egg.color,
-          speckledValue
+          speckledValue,
+          (egg.seed?.toString() ?? '0')
         ]]
       }
     });

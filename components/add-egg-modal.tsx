@@ -128,10 +128,14 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
     try {
       // Prepare the egg data
       const eggs = eggWeights.map((weight, index) => {
+        // Generate a random seed value for speckled eggs
+        const seed = isSpeckled[index] ? Math.floor(Math.random() * 1000000) + 1 : 0;
+        
         const egg = {
           weight,
           color: isSpeckled[index] ? "#f0d6a3" : "#fbe5ce", // Slightly darker for speckled eggs
           speckled: isSpeckled[index] === true,
+          seed: seed, // Add seed value
         };
         return egg;
       });

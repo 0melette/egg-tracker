@@ -22,6 +22,8 @@ export default function AddEgg() {
   const [eggCount, setEggCount] = useState(1)
   const [currentEgg, setCurrentEgg] = useState(1)
   const [eggWeights, setEggWeights] = useState<number[]>([60])
+  const [isSpeckled, setIsSpeckled] = useState<boolean[]>([false])
+  const [seeds, setSeeds] = useState<number[]>([0])
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
@@ -38,6 +40,35 @@ export default function AddEgg() {
       }
       return newWeights
     })
+    
+    // Initialize isSpeckled array
+    setIsSpeckled((prev) => {
+      const newSpeckled = [...prev]
+      // Add more speckled values if needed
+      while (newSpeckled.length < eggCount) {
+        newSpeckled.push(false)
+      }
+      // Remove extra values if count decreased
+      while (newSpeckled.length > eggCount) {
+        newSpeckled.pop()
+      }
+      return newSpeckled
+    })
+    
+    // Initialize seeds array
+    setSeeds((prev) => {
+      const newSeeds = [...prev]
+      // Add more seed values if needed
+      while (newSeeds.length < eggCount) {
+        newSeeds.push(0)
+      }
+      // Remove extra values if count decreased
+      while (newSeeds.length > eggCount) {
+        newSeeds.pop()
+      }
+      return newSeeds
+    })
+    
     // Reset current egg index if it's out of bounds
     setCurrentEgg((prev) => Math.min(prev, eggCount))
   }, [eggCount])
@@ -48,10 +79,17 @@ export default function AddEgg() {
 
     try {
       // Prepare the egg data
-      const eggs = eggWeights.map((weight) => ({
-        weight,
-        color: "#fbe5ce",
-      }))
+      const eggs = eggWeights.map((weight, index) => {
+        // Generate a random seed for speckled eggs
+        const seed = isSpeckled[index] ? (seeds[index] || Math.floor(Math.random() * 1000000) + 1) : 0;
+        
+        return {
+          weight,
+          color: isSpeckled[index] ? "#f0d6a3" : "#fbe5ce", // Different color for speckled eggs
+          speckled: isSpeckled[index],
+          seed: seed
+        }
+      })
 
       // Send the data to the API
       const response = await fetch("/api/add-eggs", {
@@ -117,8 +155,34 @@ export default function AddEgg() {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  onClick={() => setCurrentEgg((prev) => Math.max(1, prev - 1))}
-                  disabled={currentEgg === 1}
+                  onClick={() => {
+                    if (currentEgg > 1) {
+                      setCurrentEgg(prev => prev - 1);
+                    } else {
+                      // Toggle speckled status
+                      setIsSpeckled(prev => {
+                        const newSpeckled = [...prev];
+                        newSpeckled[currentEgg - 1] = !newSpeckled[currentEgg - 1];
+                        
+                        // Update seed if needed
+                        if (newSpeckled[currentEgg - 1] && seeds[currentEgg - 1] === 0) {
+                          setSeeds(prev => {
+                            const newSeeds = [...prev];
+                            newSeeds[currentEgg - 1] = Math.floor(Math.random() * 1000000) + 1;
+                            return newSeeds;
+                          });
+                        } else if (!newSpeckled[currentEgg - 1]) {
+                          setSeeds(prev => {
+                            const newSeeds = [...prev];
+                            newSeeds[currentEgg - 1] = 0;
+                            return newSeeds;
+                          });
+                        }
+                        
+                        return newSpeckled;
+                      });
+                    }
+                  }}
                 >
                   <ChevronLeft className="h-8 w-8" />
                 </Button>
@@ -126,11 +190,20 @@ export default function AddEgg() {
                 <div className="mx-4 text-center">
                   <div className="bg-white p-3 rounded-md inline-block mb-2">
                     <div className="w-[150px] h-[200px] relative flex items-center justify-center">
-                      <EggOval weight={eggWeights[currentEgg - 1]} className="scale-150" />
+                      <EggOval 
+                        weight={eggWeights[currentEgg - 1]} 
+                        color={isSpeckled[currentEgg - 1] ? "#f0d6a3" : "#fbe5ce"}
+                        speckled={isSpeckled[currentEgg - 1]}
+                        seed={seeds[currentEgg - 1]}
+                        className="scale-150" 
+                      />
                     </div>
                   </div>
 
                   <div className="mt-4">
+                    <div className="text-center mb-2 text-xs text-gray-500">
+                      Click arrows to toggle speckled
+                    </div>
                     <div className="flex items-center justify-between mb-2">
                       <EggOval weight={40} className="scale-50" />
                       <div className="font-bold">{eggWeights[currentEgg - 1]}g</div>
@@ -179,8 +252,34 @@ export default function AddEgg() {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  onClick={() => setCurrentEgg((prev) => Math.min(eggCount, prev + 1))}
-                  disabled={currentEgg === eggCount}
+                  onClick={() => {
+                    if (currentEgg < eggCount) {
+                      setCurrentEgg(prev => prev + 1);
+                    } else {
+                      // Toggle speckled status
+                      setIsSpeckled(prev => {
+                        const newSpeckled = [...prev];
+                        newSpeckled[currentEgg - 1] = !newSpeckled[currentEgg - 1];
+                        
+                        // Update seed if needed
+                        if (newSpeckled[currentEgg - 1] && seeds[currentEgg - 1] === 0) {
+                          setSeeds(prev => {
+                            const newSeeds = [...prev];
+                            newSeeds[currentEgg - 1] = Math.floor(Math.random() * 1000000) + 1;
+                            return newSeeds;
+                          });
+                        } else if (!newSpeckled[currentEgg - 1]) {
+                          setSeeds(prev => {
+                            const newSeeds = [...prev];
+                            newSeeds[currentEgg - 1] = 0;
+                            return newSeeds;
+                          });
+                        }
+                        
+                        return newSpeckled;
+                      });
+                    }
+                  }}
                 >
                   <ChevronRight className="h-8 w-8" />
                 </Button>
