@@ -11,6 +11,7 @@ import { Slider } from "@/components/ui/slider"
 import { EggOval } from "@/components/egg-oval"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useRouter } from "next/navigation"
+import { getSecretKey } from "@/lib/utils"
 
 interface AddEggModalProps {
   isOpen: boolean
