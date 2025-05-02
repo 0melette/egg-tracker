@@ -101,16 +101,33 @@ export function EditEggModal({
         ? { date, eggs: [egg] } 
         : { date, eggIndex, egg, rowIndex: initialRowIndex }
 
+      let secretKey = localStorage.getItem('eggTrackerSecretKey') || '';
+      
+      if (!secretKey) {
+        secretKey = prompt("Please enter the secret key to modify eggs:") || '';
+        if (secretKey) {
+          localStorage.setItem('eggTrackerSecretKey', secretKey);
+        }
+      }
+
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Secret-Key": secretKey,
         },
         body: JSON.stringify(body),
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to ${isNewEgg ? "add" : "update"} egg`)
+        const errorData = await response.json();
+        
+        if (response.status === 403) {
+          localStorage.removeItem('eggTrackerSecretKey');
+          throw new Error(errorData.error || "Invalid secret key")
+        } else {
+          throw new Error(`Failed to ${isNewEgg ? "add" : "update"} egg`)
+        }
       }
 
       onClose()
@@ -128,16 +145,35 @@ export function EditEggModal({
 
     setSubmitting(true)
     try {
+      // Get secret key from user
+      let secretKey = localStorage.getItem('eggTrackerSecretKey') || '';
+      
+      if (!secretKey) {
+        secretKey = prompt("Please enter the secret key to delete an egg:") || '';
+        if (secretKey) {
+          localStorage.setItem('eggTrackerSecretKey', secretKey);
+        }
+      }
+
       const response = await fetch("/api/delete-egg", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Secret-Key": secretKey,
         },
         body: JSON.stringify({ date, eggIndex, rowIndex: initialRowIndex }),
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete egg")
+        const errorData = await response.json();
+        
+        if (response.status === 403) {
+          // Clear the stored secret key if it's invalid
+          localStorage.removeItem('eggTrackerSecretKey');
+          throw new Error(errorData.error || "Invalid secret key")
+        } else {
+          throw new Error("Failed to delete egg")
+        }
       }
 
       onDelete()

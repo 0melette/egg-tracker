@@ -1,11 +1,17 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 import { readEggData } from "@/lib/data-service"
 import { addEggsToSheets } from "@/lib/sheets-service"
+import { validateApiKey } from "@/lib/utils"
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const validationError = validateApiKey(request)
+    if (validationError) {
+      return validationError
+    }
+
     const { date, eggs } = await request.json()
 
     // Validate input

@@ -126,6 +126,15 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
     setSubmitting(true)
 
     try {
+      let secretKey = localStorage.getItem('eggTrackerSecretKey') || '';
+      
+      if (!secretKey) {
+        secretKey = prompt("Please enter the secret key to modify eggs:") || '';
+        if (secretKey) {
+          localStorage.setItem('eggTrackerSecretKey', secretKey);
+        }
+      }
+      
       // Prepare the egg data
       const eggs = eggWeights.map((weight, index) => {
         // Generate a random seed value for speckled eggs
@@ -158,6 +167,7 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Secret-Key": secretKey,
         },
         body: JSON.stringify({
           date,
@@ -166,7 +176,15 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to save eggs")
+        const errorData = await response.json();
+        
+        if (response.status === 403) {
+          // Clear the stored secret key if it's invalid
+          localStorage.removeItem('eggTrackerSecretKey');
+          throw new Error(errorData.error || "Invalid secret key")
+        } else {
+          throw new Error("Failed to save eggs")
+        }
       }
 
       // Close modal and refresh data
