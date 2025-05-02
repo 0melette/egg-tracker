@@ -7,6 +7,8 @@ export interface Egg {
   weight: number
   color: string
   speckled?: boolean
+  rowIndex?: number
+  seed?: number
 }
 
 export interface DayData {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 import { readEggData } from "@/lib/data-service"
+import { addEggsToSheets } from "@/lib/sheets-service"
 
 export async function POST(request: Request) {
   try {
@@ -12,29 +13,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid input data" }, { status: 400 })
     }
 
-    // Read current data
-    const data = await readEggData()
-
-    // Find if the date already exists
-    const existingDayIndex = data.eggs.findIndex((day) => day.date === date)
-
-    if (existingDayIndex !== -1) {
-      // Update existing day
-      data.eggs[existingDayIndex].eggs = [...data.eggs[existingDayIndex].eggs, ...eggs]
-    } else {
-      // Add new day
-      data.eggs.push({
-        date,
-        eggs,
-      })
-    }
-
-    // Sort the data by date (newest first)
-    data.eggs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-    // Write the updated data back to the file
-    const dataFilePath = path.join(process.cwd(), "public", "data", "eggs.json")
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2))
+    // Always use Google Sheets
+    await addEggsToSheets(date, eggs)
 
     return NextResponse.json({ success: true })
   } catch (error) {
