@@ -27,7 +27,7 @@ const chickens: ChickenProfile[] = [
     id: 2,
     name: "Two Peck 2",
     breed: "ISA Brown",
-    funFact: "Catches bugs like a pro",
+    funFact: "Debugging",
     image: "/images/two-peck-coding.png",
   },
   {
@@ -125,7 +125,7 @@ export default function About() {
         <div className="mt-12 text-center">
           <h2 className="text-2xl font-bold mb-4">the gang</h2>
           <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md">
-            <p className="mb-4">I have 3 chickens!!</p>
+            <p className="mb-4">I have 3 lovely chickens!!</p>
             <p>more to come 🫣?!</p>
           </div>
         </div>

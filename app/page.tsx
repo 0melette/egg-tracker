@@ -10,7 +10,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Image src="/images/logo.png" alt="TwoPeck's Eggs Logo" width={150} height={150} className="object-contain" />
-            <h1 className="text-4xl  text-egg-cream">TwoPeck's Eggs</h1>
+            <h1 className="text-4xl text-egg-cream">TwoPeck's Eggs</h1>
           </div>
           <div className="flex gap-2">
             <Button asChild className="bg-green-500 hover:bg-green-600">
