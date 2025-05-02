@@ -18,6 +18,7 @@ interface EditEggModalProps {
   initialWeight?: number
   initialSpeckled?: boolean
   onDelete?: () => void
+  initialRowIndex?: number  // Added for Google Sheets
 }
 
 export function EditEggModal({
@@ -28,6 +29,7 @@ export function EditEggModal({
   initialWeight = 60,
   initialSpeckled = false,
   onDelete,
+  initialRowIndex,
 }: EditEggModalProps) {
   const router = useRouter()
   const [weight, setWeight] = useState(initialWeight)
@@ -70,16 +72,20 @@ export function EditEggModal({
     applyWeightValue()
     setSubmitting(true)
 
-    try {
+    try {      
       const egg = {
         weight,
         color: eggColor,
-        speckled: isSpeckled,
+        speckled: isSpeckled === true,
       }
+      
+      console.log('Created egg object:', egg);
 
       // API endpoint and method depend on whether we're adding or editing
       const endpoint = isNewEgg ? "/api/add-eggs" : "/api/update-egg"
-      const body = isNewEgg ? { date, eggs: [egg] } : { date, eggIndex, egg }
+      const body = isNewEgg 
+        ? { date, eggs: [egg] } 
+        : { date, eggIndex, egg, rowIndex: initialRowIndex }
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -113,7 +119,7 @@ export function EditEggModal({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ date, eggIndex }),
+        body: JSON.stringify({ date, eggIndex, rowIndex: initialRowIndex }),
       })
 
       if (!response.ok) {
@@ -155,7 +161,13 @@ export function EditEggModal({
 
                 <div className="bg-white p-3 rounded-md inline-block mx-4">
                   <div className="w-[180px] h-[220px] relative flex items-center justify-center">
-                    <EggOval weight={weight} color={eggColor} speckled={isSpeckled} className="scale-150" />
+                    <EggOval 
+                      weight={weight} 
+                      color={eggColor} 
+                      speckled={isSpeckled === true} 
+                      className="scale-150"
+                      key={`edit-egg-${date}-${eggIndex || 'new'}`}
+                    />
                   </div>
                 </div>
 

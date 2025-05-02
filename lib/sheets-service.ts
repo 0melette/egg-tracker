@@ -26,29 +26,49 @@ export async function readEggDataFromSheets(): Promise<EggData> {
     const rows = response.data.values || [];
     const eggData: EggData = { eggs: [] };
     
+    // Add stylish logging for data reading
+    console.log('%c 📊 Google Sheets Operation: READ EGGS', 'font-size: 14px; font-weight: bold; color: #4285F4;');
+    console.log('%c Total rows found:', 'color: #0F9D58; font-weight: bold;', rows.length);
+    
     // Process rows into our data structure
     // Expected format: Date | Weight | Color | Speckled (true/false)
-    const dateMap = new Map<string, Egg[]>();
+    const dateMap = new Map<string, { egg: Egg, rowIndex: number }[]>();
     
-    rows.forEach(row => {
+    rows.forEach((row, index) => {
       if (row.length >= 3) {
         const date = row[0];
         const weight = Number(row[1]);
         const color = row[2];
-        const speckled = row[3] === 'true';
+        const speckledValue = row[3] === 'true';
         
-        const egg: Egg = { weight, color, speckled };
+        console.log(
+          `%c Row #${index}:`,
+          'color: #DB4437;',
+          `Date: ${date}`,
+          `Weight: ${weight}g`,
+          `Color: ${color}`,
+          `Speckled raw: "${row[3]}"`,
+          `→ Parsed as: ${speckledValue ? '✓' : '✗'}`
+        );
+        
+        const egg: Egg = { 
+          weight, 
+          color, 
+          speckled: speckledValue, // Store as boolean
+          rowIndex: index // Store the row index for later updates
+        };
         
         if (dateMap.has(date)) {
-          dateMap.get(date)?.push(egg);
+          dateMap.get(date)?.push({ egg, rowIndex: index });
         } else {
-          dateMap.set(date, [egg]);
+          dateMap.set(date, [{ egg, rowIndex: index }]);
         }
       }
     });
     
     // Convert map to array of DayData
-    dateMap.forEach((eggs, date) => {
+    dateMap.forEach((items, date) => {
+      const eggs = items.map(item => item.egg);
       eggData.eggs.push({ date, eggs });
     });
     
@@ -79,13 +99,31 @@ export async function getLastNDaysFromSheets(n = 7): Promise<DayData[]> {
 // Add eggs to Google Sheets
 export async function addEggsToSheets(date: string, eggs: Egg[]): Promise<void> {
   try {
+    // Add stylish logging
+    console.log('%c 📊 Google Sheets Operation: ADD EGGS', 'font-size: 14px; font-weight: bold; color: #4285F4;');
+    console.log('%c Date:', 'color: #0F9D58; font-weight: bold;', date);
+    
+    // Log each egg with stylish formatting
+    eggs.forEach((egg, index) => {
+      console.log(
+        `%c Egg #${index + 1}:`,
+        'color: #DB4437; font-weight: bold;',
+        `\n   Weight: ${egg.weight}g`,
+        `\n   Color: ${egg.color}`,
+        `\n   Speckled: ${egg.speckled === true ? '✓' : '✗'} (${typeof egg.speckled})`
+      );
+    });
+    
     // Prepare rows to append to the spreadsheet
     const rows = eggs.map(egg => [
       date,
       egg.weight.toString(),
       egg.color,
-      egg.speckled ? 'true' : 'false'
+      egg.speckled === true ? 'true' : 'false'
     ]);
+    
+    console.log('%c Data being saved to sheets:', 'color: #F4B400; font-weight: bold;');
+    console.table(rows);
     
     // Append rows to the spreadsheet
     await sheets.spreadsheets.values.append({
@@ -108,6 +146,26 @@ export async function updateEggInSheets(
   egg: { weight: number; color: string; speckled?: boolean }
 ): Promise<void> {
   try {
+    // Add stylish logging
+    console.log('%c 📊 Google Sheets Operation: UPDATE EGG', 'font-size: 14px; font-weight: bold; color: #4285F4;');
+    console.log('%c Row Index:', 'color: #0F9D58; font-weight: bold;', rowIndex);
+    
+    // Log egg details with fancy format
+    console.log(
+      '%c Egg Details:',
+      'color: #DB4437; font-weight: bold;',
+      `\n   Weight: ${egg.weight}g`,
+      `\n   Color: ${egg.color}`,
+      `\n   Speckled: ${egg.speckled === true ? '✓' : '✗'} (${typeof egg.speckled})`
+    );
+    
+    const speckledValue = egg.speckled === true ? 'true' : 'false';
+    console.log('%c Value being saved to sheets:', 'color: #F4B400; font-weight: bold;', [
+      egg.weight.toString(),
+      egg.color,
+      speckledValue
+    ]);
+    
     // Update the row
     await sheets.spreadsheets.values.update({
       spreadsheetId,
@@ -117,7 +175,7 @@ export async function updateEggInSheets(
         values: [[
           egg.weight.toString(),
           egg.color,
-          egg.speckled ? 'true' : 'false'
+          speckledValue
         ]]
       }
     });

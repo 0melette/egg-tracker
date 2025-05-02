@@ -127,11 +127,27 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
 
     try {
       // Prepare the egg data
-      const eggs = eggWeights.map((weight, index) => ({
-        weight,
-        color: isSpeckled[index] ? "#f0d6a3" : "#fbe5ce", // Slightly darker for speckled eggs
-        speckled: isSpeckled[index],
-      }))
+      const eggs = eggWeights.map((weight, index) => {
+        const egg = {
+          weight,
+          color: isSpeckled[index] ? "#f0d6a3" : "#fbe5ce", // Slightly darker for speckled eggs
+          speckled: isSpeckled[index] === true,
+        };
+        return egg;
+      });
+      
+      // Log egg data in a nice format
+      console.log('%c 🥚 Eggs being saved:', 'font-size: 14px; font-weight: bold; color: #8B4513;');
+      eggs.forEach((egg, index) => {
+        console.log(
+          `%c Egg #${index + 1}:`,
+          'color: #333; font-weight: bold;',
+          `\n   Weight: ${egg.weight}g`,
+          `\n   Color: ${egg.color}`,
+          `\n   Speckled: ${egg.speckled ? '✓' : '✗'}`
+        );
+      });
+      console.log(`%c Date: ${date}`, 'color: #333; font-weight: bold;');
 
       // Send the data to the API
       const response = await fetch("/api/add-eggs", {
@@ -206,7 +222,7 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
                       <EggOval
                         weight={eggWeights[currentEgg - 1]}
                         color={isSpeckled[currentEgg - 1] ? "#f0d6a3" : "#fbe5ce"}
-                        speckled={isSpeckled[currentEgg - 1]}
+                        speckled={isSpeckled[currentEgg - 1] === true}
                         className="scale-150"
                       />
                     </div>

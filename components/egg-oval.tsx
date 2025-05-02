@@ -41,11 +41,11 @@ export function EggOval({ weight, color = "#f0e0c8", speckled = false, className
       const left = Math.random() * 100
       const top = Math.random() * 100
 
-      // Random size (tiny)
-      const size = Math.random() * 1.5 + 0.5
+      // Increased size for better visibility
+      const size = Math.random() * 2.5 + 1.0
 
-      // Random opacity
-      const opacity = Math.random() * 0.2 + 0.05
+      // Increased opacity for better visibility
+      const opacity = Math.random() * 0.5 + 0.3
 
       speckles.push(
         <div
@@ -57,7 +57,7 @@ export function EggOval({ weight, color = "#f0e0c8", speckled = false, className
             width: `${size}px`,
             height: `${size}px`,
             borderRadius: "50%",
-            backgroundColor: "rgba(139, 69, 19, 0.7)",
+            backgroundColor: "rgba(139, 69, 19, 0.9)",
             opacity,
           }}
         />,

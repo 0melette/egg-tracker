@@ -4,13 +4,8 @@ import { getEggStatsFromSheets } from "@/lib/sheets-service"
 
 export async function GET() {
   try {
-    // Check if we should use Google Sheets
-    const useSheets = process.env.USE_GOOGLE_SHEETS === "true"
-    
-    // Get stats from appropriate source
-    const stats = useSheets 
-      ? await getEggStatsFromSheets()
-      : await getEggStats()
+    // Always use Google Sheets
+    const stats = await getEggStatsFromSheets()
       
     return NextResponse.json(stats)
   } catch (error) {
