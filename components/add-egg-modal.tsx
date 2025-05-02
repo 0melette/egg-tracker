@@ -126,7 +126,7 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
     setSubmitting(true)
 
     try {
-      const secretKey = prompt("what's the secret password 🤭?") || '';
+      const secretKey = getSecretKey();
       
       // Prepare the egg data
       const eggs = eggWeights.map((weight, index) => {
