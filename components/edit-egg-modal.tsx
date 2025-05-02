@@ -101,7 +101,7 @@ export function EditEggModal({
         ? { date, eggs: [egg] } 
         : { date, eggIndex, egg, rowIndex: initialRowIndex }
 
-      const secretKey = prompt("what's the secret password 🤭?") || '';
+      const secretKey = getSecretKey();
 
       const response = await fetch(endpoint, {
         method: "POST",
