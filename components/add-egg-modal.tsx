@@ -126,6 +126,8 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
     setSubmitting(true)
 
     try {
+      const secretKey = getSecretKey();
+      
       // Prepare the egg data
       const eggs = eggWeights.map((weight, index) => {
         // Generate a random seed value for speckled eggs
@@ -158,6 +160,7 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Secret-Key": secretKey,
         },
         body: JSON.stringify({
           date,
@@ -166,7 +169,13 @@ export function AddEggModal({ isOpen, onClose, date }: AddEggModalProps) {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to save eggs")
+        const errorData = await response.json();
+        
+        if (response.status === 403) {
+          throw new Error(errorData.error || "Invalid secret key")
+        } else {
+          throw new Error("Failed to save eggs")
+        }
       }
 
       // Close modal and refresh data
