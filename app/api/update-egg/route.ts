@@ -8,6 +8,8 @@ export async function POST(request: Request) {
   try {
     const { date, eggIndex, egg, rowIndex } = await request.json()
 
+    console.log("Update egg API received:", {egg });
+    
     // Validate input
     if (!date || eggIndex === undefined || !egg) {
       return NextResponse.json({ error: "Invalid input data" }, { status: 400 })

@@ -149,6 +149,7 @@ export function EggTimeline() {
         eggIndex={selectedEggIndex}
         initialWeight={selectedEgg?.weight}
         initialSpeckled={selectedEgg?.speckled}
+        initialRowIndex={selectedEgg?.rowIndex}
         onDelete={handleEggDeleted}
       />
     </>
