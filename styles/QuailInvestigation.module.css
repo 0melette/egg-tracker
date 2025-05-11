@@ -1,0 +1,230 @@
+/* styles/QuailInvestigation.module.css */
+
+.pageContainer {
+  min-height: 100vh;
+  background-color: #f0f2f5; /* Light grey background */
+  color: #333; /* Dark grey text */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.mainContent {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.pageTitle {
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: #2c3e50; /* Darker blue-grey */
+  margin-bottom: 8px;
+}
+
+.pageSubtitle {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.statusBar {
+  margin: 15px 0;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 250px;
+}
+
+.timerValue {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #e74c3c; /* Reddish color for timer */
+}
+
+.feedbackMessage {
+  margin: 15px 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  min-height: 1.5em; /* Reserve space */
+  text-align: center;
+}
+
+.feedbackMessage.found {
+  color: #2ecc71; /* Green for found */
+}
+
+.feedbackMessage.missed {
+  color: #e74c3c; /* Red for missed/time up */
+}
+
+.unitGrid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(100px, 1fr)
+  ); /* Responsive grid */
+  gap: 15px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.unitContainer {
+  aspect-ratio: 1 / 1; /* Square images */
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+  background-color: #fff; /* Background for image container */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative; /* For potential pseudo-elements or overlays */
+}
+
+.unitContainer:hover {
+  transform: scale(1.05);
+  border-color: #3498db; /* Blue highlight on hover */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.unitImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure image covers the container */
+}
+
+.unitContainer.foundImposter {
+  border-color: #2ecc71 !important; /* Green border */
+  box-shadow: 0 0 15px #2ecc71 !important;
+  transform: scale(1.1) !important;
+}
+
+.unitContainer.missedImposter {
+  border-color: #e74c3c !important; /* Red border */
+  box-shadow: 0 0 15px #e74c3c !important;
+  animation: pulseError 0.8s infinite alternate;
+}
+
+@keyframes pulseError {
+  from {
+    box-shadow: 0 0 5px #e74c3c;
+  }
+  to {
+    box-shadow:
+      0 0 15px #e74c3c,
+      0 0 20px #e74c3c;
+  }
+}
+
+.actionButton {
+  background-color: #3498db; /* Blue */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 30px;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.actionButton:hover {
+  background-color: #2980b9; /* Darker blue */
+  transform: translateY(-1px);
+}
+
+.actionButton:active {
+  transform: translateY(0px);
+}
+
+/* Modal Styles (reusing/adapting from a previous non-shadcn version) */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modalContent {
+  background-color: #ffffff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  color: #333;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modalCloseButton {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: #888;
+  cursor: pointer;
+  line-height: 1;
+}
+.modalCloseButton:hover {
+  color: #333;
+}
+
+.modalImageContainer {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modalImage {
+  /* Class for the Next/Image component inside modal */
+  border-radius: 50%; /* Circular image */
+  border: 3px solid #eee;
+}
+
+.modalTitle {
+  text-align: center;
+  font-size: 1.9rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.modalDetails p {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.modalDetails strong {
+  color: #34495e; /* Darker blue-grey for labels */
+  margin-right: 5px;
+}
