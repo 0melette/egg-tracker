@@ -16,6 +16,9 @@ export default function Home() {
             <Button asChild className="bg-green-500 hover:bg-green-600">
               <Link href="/about">meet the makers</Link>
             </Button>
+            <Button asChild className="bg-orange-500 hover:bg-orange-600">
+              <Link href="/quails">quail army</Link>
+            </Button>
             <Button asChild className="bg-purple-500 hover:bg-purple-600">
               <Link href="/dev-notes">dev notes</Link>
             </Button>
