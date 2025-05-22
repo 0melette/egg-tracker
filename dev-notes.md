@@ -1,12 +1,11 @@
 Purpose: just to show off my chicken and have a cool way to track how many eggs I've been getting
 
-
 -----------------------
 
 18th may - used v0 to bash out the basics of the website - vibe coding haha
 
 what was included
-- add and edit egg 
+- add and edit egg
     - if no eggs are recorded no chicken
 - gallery of chickens
     - a lot of unneeded fields so i removed  alot
@@ -16,7 +15,7 @@ things you can do now
 
 learning stuff
 - learning to use React
-- installed why-did-you-render 
+- installed why-did-you-render
     - helps to detect unnecessary React component rerenders
     - haven't used it too indepth rn
 - install ColorZilla on chrome to help pick out colours
@@ -36,7 +35,7 @@ fun ideas
  - weather and daylight hour sync to see if that has an effect
  - colour customisation - probably just a few presets in the future
 
- how will i update it? 
+ how will i update it?
  - manually edit the json and commit ? lmao
  - oooh notion intergration seems interesting to look into
 -----------------------
@@ -44,5 +43,13 @@ fun ideas
  21st april
  - restyled to have more of a nicer theme
  - added dev notes
- - uploaded two peck images 
+ - uploaded two peck images
  - fix graph to not show things if no value
+
+---
+ 11th May
+ - @yunz-dev has invaded the repo
+    - added quail army button
+    - lil easter egg: find the imposter quail!!
+    - WIP
+---
