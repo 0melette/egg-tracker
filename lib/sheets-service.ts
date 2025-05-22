@@ -248,11 +248,19 @@ export async function getEggStatsFromSheets() {
 
   const avgWeight = totalEggs > 0 ? totalWeight / totalEggs : 0;
 
-  // Calculate eggs per day
-  const eggsPerDay = data.eggs.map((day) => ({
-    date: day.date,
-    count: day.eggs.length,
-  }));
+  const dateMap = new Map(data.eggs.map(day => [day.date, day.eggs.length]));
+
+  const eggsPerDay = [];
+  const today = new Date();
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+    const formattedDate = date.toISOString().split('T')[0];
+    eggsPerDay.push({
+      date: formattedDate,
+      count: dateMap.get(formattedDate) || 0
+    });
+  }
 
   // Calculate weight distribution
   const weightRanges = {
