@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
+const GOLDEN = "#FFD700"
+
 export default function Analytics() {
   const [stats, setStats] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -116,13 +118,17 @@ export default function Analytics() {
                     <XAxis
                       dataKey="date"
                       tickFormatter={(value) => {
-                        const date = new Date(value)
-                        return `${date.getDate()}/${date.getMonth() + 1}`
+                        const [year, month, day] = value.split('-')
+                        return `${parseInt(day, 10)}/${parseInt(month, 10)}`
                       }}
                     />
-                    <YAxis allowDecimals={false} />
+                    <YAxis allowDecimals={false} domain={[0, 3]} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" fill="var(--color-count)" radius={4} />
+                    <Bar dataKey="count" radius={4} fill="var(--color-count)">
+                      {stats.eggsPerDay.map((entry: any, idx: number) => (
+                        <Cell key={`cell-${idx}`} fill={entry.count === 3 ? GOLDEN : "var(--color-count)"} />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </ChartContainer>

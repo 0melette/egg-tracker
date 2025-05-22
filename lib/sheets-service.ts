@@ -252,7 +252,7 @@ export async function getEggStatsFromSheets() {
 
   const eggsPerDay = [];
   const today = new Date();
-  for (let i = 0; i < 7; i++) {
+  for (let i = 6; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
     const formattedDate = date.toISOString().split('T')[0];
