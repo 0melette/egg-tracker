@@ -52,6 +52,8 @@ export default function Analytics() {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28"]
   const EGG_COLORS = ["#fbe5ce", "#f8e0b0"]
 
+  const last7Avg = (stats.eggsPerDay.reduce((sum, d) => sum + d.count, 0) / 7).toFixed(1)
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-6">
@@ -87,11 +89,11 @@ export default function Analytics() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle>Daily Average</CardTitle>
-            <CardDescription>Eggs per day</CardDescription>
+            <CardTitle>Daily Average (Last 7 Days)</CardTitle>
+            <CardDescription>Eggs per day (last 7 days)</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold">{(stats.totalEggs / stats.eggsPerDay.length).toFixed(1)}</p>
+            <p className="text-4xl font-bold">{last7Avg}</p>
           </CardContent>
         </Card>
       </div>
